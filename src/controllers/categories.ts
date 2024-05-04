@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CategoriesService } from "../services/Categories";
 import { CategoriesInterface } from "../DB/models/Categories";
-import { responseError, responseNormal } from "../utils/responseNormal";
+import { responseNormal } from "../utils/responseNormal";
 
 export const categoriesCreateController = async (
   req: Request,
@@ -14,12 +14,12 @@ export const categoriesCreateController = async (
     const isCreatedCategory = await CategoriesService.Create(category);
 
     if (!isCreatedCategory) {
-      responseError(res, "category not created", 400);
+      res.status(400).json({ message: "category not created", code: 400 });
     }
 
-    responseNormal(res, {}, "product created", 201);
+    return responseNormal(res, {}, "category created", 201);
   } catch (error) {
-    responseError(res, "error", 500);
+    res.status(500).json({ message: "error", code: 500 });
   }
 };
 
@@ -31,15 +31,11 @@ export const categoriesDelController = async (
   try {
     const id = req.params.id;
 
-    const isDeleted = await CategoriesService.delete(id);
+    await CategoriesService.delete(id);
 
-    if (!isDeleted) {
-      responseError(res, "error to deleted category", 400);
-    }
-
-    responseNormal(res, {}, "product deleted", 200);
+    return res.json({ message: "product deleted", code: 200 }).status(200);
   } catch (error) {
-    responseError(res, "error to deleted", 500);
+    return res.status(500).json({ message: "error to deleted", code: 500 });
   }
 };
 
@@ -52,12 +48,17 @@ export const categoriesRowController = async (
     const productRow = await CategoriesService.findCategories();
 
     if (productRow.length <= 0) {
-      responseError(res, "error to found categories", 404);
+      return res
+        .status(404)
+        .json({ message: "error to found categories", code: 404 });
     }
+    // return res
+    //   .status(200)
+    //   .json({ message: "products found", data: productRow, code: 200 });
 
-    responseNormal(res, productRow, "products found", 200);
+    return responseNormal(res, productRow, "products found", 200);
   } catch (error) {
-    responseError(res, "error", 500, error);
+    return res.status(200).json({ message: "error", code: 500 });
   }
 };
 
@@ -71,11 +72,13 @@ export const categoriesOneController = async (
     const productOne = await CategoriesService.findCategory(id);
 
     if (!productOne) {
-      responseError(res, "error to found category", 404);
+      return res
+        .status(404)
+        .json({ message: "error to found category", code: 404 });
     }
 
-    responseNormal(res, productOne, "product found", 200);
+    return res.status(200).json({ message: "products found", code: 200 });
   } catch (error) {
-    responseError(res, "error", 500, error);
+    return res.status(500).json({ message: "error", code: 500, error });
   }
 };

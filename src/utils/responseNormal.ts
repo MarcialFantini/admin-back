@@ -11,9 +11,11 @@ export const responseNormal = (
 
 export const responseError = (
   res: Response,
+
   message: string,
   code: number,
-  error?: unknown
+  error?: unknown,
+  data?: unknown
 ) => {
-  return res.status(code).json({ message, code, error });
+  return res.status(code).json({ error, code, data, message });
 };

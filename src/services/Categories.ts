@@ -20,6 +20,7 @@ export class CategoriesService {
 
   static async findCategories() {
     const categories = await Categories.findAll({ limit: 20 });
+
     return categories;
   }
 }

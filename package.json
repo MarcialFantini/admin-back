@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/src/App.js",
-    "dev": "nodemon src/App.ts"
+    "start": "bun dist/src/App.js",
+    "dev": "bun --watch src/App.ts"
   },
   "keywords": [],
   "author": "",

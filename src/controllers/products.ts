@@ -13,13 +13,15 @@ export const CreateProductController = async (
     const isNewProductCreated = await ProductService.createProduct(product);
 
     if (!isNewProductCreated) {
-      return responseError(res, "product not created", 400);
+      return res
+        .status(400)
+        .json({ code: 400, message: "product not created" });
     }
 
-    return responseNormal(res, {}, "product created", 200);
+    return res.status(201).json({ code: 201, message: "product created" });
   } catch (error) {
     console.log(error);
-    return responseError(res, "error", 500);
+    return res.status(500).json({ message: "error", code: 500 });
   }
 };
 
@@ -36,11 +38,11 @@ export const UpdateProductController = async (
       id
     );
     if (!isProductUpdate) {
-      responseError(res, "error to update product", 400);
+      res.status(400).json({ code: 400, message: "error to update product" });
     }
-    return responseNormal(res, {}, "product update", 200);
+    return res.status(200).json({ message: "product update", code: 200 });
   } catch (error) {
-    return responseError(res, "error", 500);
+    return res.status(500).json({ message: "error", code: 500 });
   }
 };
 
@@ -54,12 +56,12 @@ export const DelProductController = async (
     const isProductDeleted = await ProductService.delProduct(id);
 
     if (!isProductDeleted) {
-      responseError(res, "product not deleted", 400);
+      res.status(400).json({ message: "product not deleted", code: 400 });
     }
 
-    return responseError(res, "product deleted", 200);
+    return res.status(200).json({ message: "product deleted", code: 200 });
   } catch (error) {
-    return responseError(res, "product not deleted", 500);
+    return res.status(500).json({ message: "product not deleted", code: 500 });
   }
 };
 
@@ -75,11 +77,15 @@ export const GetPageProductController = async (
     const productList = await ProductService.getProductRow(offset, page);
 
     if (productList.length <= 0) {
-      return responseError(res, "error to get products", 404, []);
+      return res
+        .status(404)
+        .json({ message: "error to get products", code: 404 });
     }
-    return responseNormal(res, productList, "products found", 200);
+    return res
+      .status(200)
+      .json({ message: "products found", data: productList, code: 200 });
   } catch (error) {
-    return responseError(res, "error", 500);
+    return res.status(500).json({ message: "error", code: 500 });
   }
 };
 
@@ -94,10 +100,28 @@ export const GetProductController = async (
     const productFinned = await ProductService.getOneProductById(id);
 
     if (!productFinned) {
-      return responseError(res, "error to found product", 404);
+      return res
+        .status(404)
+        .json({ message: "error to found product", code: 404 });
     }
-    return responseNormal(res, productFinned, "found product", 200);
+    return res.status(200).json({ message: "found product", code: 200 });
   } catch (error) {
-    return responseError(res, "error", 500);
+    return res.json({ message: "error", code: 500 });
+  }
+};
+
+export const GetProductByNameController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const name = req.params.name;
+
+    const products = await ProductService.getProductsByName(name);
+
+    return responseNormal(res, products, "products found by name", 200);
+  } catch (error) {
+    return responseError(res, "error to found products by name", 500);
   }
 };

@@ -1,6 +1,5 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../connection";
-import { Orders } from "./Orders";
 import { Roles } from "./Roles";
 
 export interface UserInterface {

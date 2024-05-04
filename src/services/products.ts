@@ -1,10 +1,12 @@
+import { Op } from "sequelize";
 import { Categories } from "../DB/models/Categories";
 import { Product, ProductInterface } from "../DB/models/products";
 
 export class ProductService {
   static async createProduct(product: ProductInterface) {
-    await Product.create(product);
-    return true;
+    console.log(product);
+    const productCreated = await Product.create(product);
+    return productCreated;
   }
 
   static async patchProduct(product: ProductInterface, id: string) {
@@ -39,5 +41,17 @@ export class ProductService {
       include: [{ model: Product, limit: offset, as: "products" }],
     });
     return productsCategories;
+  }
+
+  static async getProductsByName(name: string) {
+    const productsByName = await Product.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${name}%`,
+        },
+      },
+    });
+
+    return productsByName;
   }
 }

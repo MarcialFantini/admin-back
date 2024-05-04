@@ -1,13 +1,12 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../connection";
-import { rolesSections } from "./rolesSections";
 
-export interface RolesInterface {
+export interface PlaceInterface {
   id?: string;
   name: string;
 }
 
-export const Roles = sequelize.define<Model<RolesInterface>>("Roles", {
+export const Place = sequelize.define<Model<PlaceInterface>>("Place", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -16,6 +15,3 @@ export const Roles = sequelize.define<Model<RolesInterface>>("Roles", {
   },
   name: { type: DataTypes.STRING, allowNull: false },
 });
-
-Roles.hasMany(rolesSections, { foreignKey: "role_id" });
-rolesSections.belongsTo(Roles, { foreignKey: "role_id" });
