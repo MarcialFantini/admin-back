@@ -15,20 +15,18 @@ export interface OrderDetailsCreateInterface {
 export class OrdersService {
   static async createOrder(
     idUser: string,
-    orders: OrderDetailsCreateInterface[]
+    orders: OrderDetailsCreateInterface[],
+    place_id: string
   ) {
+    console.log(idUser, orders, place_id);
     try {
-      console.log(idUser, orders);
       const order = await Orders.create({
         client_id: idUser,
-        status: "initial",
-        place_id: "",
+        place_id: place_id,
       });
-      console.log(order);
-      console.log("ID ORDER: ", order.dataValues.id);
 
       const idNewOrder = order.dataValues.id || "";
-      console.log(idNewOrder);
+
       const ordersPromise = orders.map((item) => {
         return OrdersDetail.createOrderDetail(idNewOrder, item);
       });
@@ -52,15 +50,18 @@ export class OrdersService {
     const orders = await Orders.findAll({
       limit,
       offset: page > 0 ? page * limit : 0,
+      where: {
+        isDelete: false,
+      },
     });
     return orders;
   }
 
   static async getOrdersOneWithDetails(idOrder: string) {
-    const orders = await Orders.findByPk(idOrder);
+    // const orders = await Orders.findByPk(idOrder);
 
     const orderMain = (await sequelize.query(
-      `SELECT o.id, o.status, u.name, pl.name as place
+      `SELECT o.id, o.operation_id , u.name, pl.name as place
 from
     "Orders" as o
     INNER JOIN "Places" as pl ON o.place_id = pl.id
@@ -83,7 +84,7 @@ WHERE
     );
 
     const details = ordersDetail[0].map((item) => item);
-
+    console.log({ ...orderMain, details });
     return { ...orderMain[0][0], details };
   }
 
@@ -102,5 +103,22 @@ WHERE
       order_id: idOrder,
     });
     return true;
+  }
+
+  static async changeOrderOperation(idOrder: string, idOperation: string) {
+    console.log(idOperation, idOrder);
+    const newOrder = await Orders.update(
+      { operation_id: idOperation },
+      { where: { id: idOrder } }
+    );
+    return newOrder;
+  }
+
+  static async deleteOrderById(idOrder: string) {
+    const newOrder = await Orders.update(
+      { isDelete: true },
+      { where: { id: idOrder } }
+    );
+    return newOrder;
   }
 }

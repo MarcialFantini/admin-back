@@ -18,7 +18,8 @@ export const createOrderController = async (
     console.log("BODY: ", body);
     const isCompleted = await OrdersService.createOrder(
       body.idUser,
-      body.orders
+      body.orders,
+      body.place_id
     );
 
     console.log("IS COMPLETE", isCompleted);
@@ -90,5 +91,43 @@ export const changeOrderPlaceController = async (
     return responseNormal(res, {}, "order place updated", 200);
   } catch (error) {
     return responseError(res, "error to update place", 500);
+  }
+};
+
+export const changeOrderOperationController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { idOrder, idOperation } = req.body as {
+      idOrder: string;
+      idOperation: string;
+    };
+
+    const newOperation = await OrdersService.changeOrderOperation(
+      idOrder,
+      idOperation
+    );
+
+    return responseNormal(res, newOperation, "operation change on order", 200);
+  } catch (error) {
+    console.log(error);
+    return responseError(res, "error to order operation", 500);
+  }
+};
+
+export const orderDeleteById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const idOrder = req.params.id;
+    const rowsDelete = await OrdersService.deleteOrderById(idOrder);
+
+    return responseNormal(res, rowsDelete, "order deleted", 200);
+  } catch (error) {
+    return responseError(res, "error to deleted order", 500);
   }
 };
