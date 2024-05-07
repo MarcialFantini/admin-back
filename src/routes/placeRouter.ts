@@ -5,12 +5,13 @@ import {
   GetPlaceController,
   UpdatePlaceController,
 } from "../controllers/place";
+import { autNormalJwt } from "../middleware/autJwt";
 
 const routerPlace = Router();
 
-routerPlace.post("/create", CreatePlaceController);
-routerPlace.delete("/delete/:id", DeletePlaceController);
-routerPlace.patch("/update/:id", UpdatePlaceController);
-routerPlace.get("/rows", GetPlaceController);
+routerPlace.post("/create", autNormalJwt, CreatePlaceController);
+routerPlace.delete("/delete/:id", autNormalJwt, DeletePlaceController);
+routerPlace.patch("/update/:id", autNormalJwt, UpdatePlaceController);
+routerPlace.get("/rows", autNormalJwt, GetPlaceController);
 
 export default routerPlace;

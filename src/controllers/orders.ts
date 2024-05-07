@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { OrderDetailsCreateInterface, OrdersService } from "../services/orders";
 import { responseError, responseNormal } from "../utils/responseNormal";
+import { LoginService } from "../services/login";
 
 interface bodyResponseCreate {
   idUser: string;
@@ -15,9 +16,25 @@ export const createOrderController = async (
 ) => {
   try {
     const body = req.body as bodyResponseCreate;
+    console.log(req.headers);
+    const authorization = req.headers.authorization;
+
+    if (!authorization) {
+      throw new Error("error to send token");
+    }
+
+    const token = authorization.split(" ")[1];
+    console.log(token);
+    const id = await LoginService.testToken(token);
+    console.log(id);
+
+    if (!id) {
+      return responseError(res, "error to found user", 400);
+    }
+
     console.log("BODY: ", body);
     const isCompleted = await OrdersService.createOrder(
-      body.idUser,
+      id,
       body.orders,
       body.place_id
     );

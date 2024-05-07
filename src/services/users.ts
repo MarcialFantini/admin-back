@@ -8,6 +8,7 @@ export class UserService {
   }
   static async delUser(idUser: string) {
     const rowsDeleted = await Users.destroy({ where: { id: idUser } });
+    console.log(rowsDeleted);
     return rowsDeleted >= 0;
   }
   static async patchUser(idUser: string, valuesUser: UserInterface) {

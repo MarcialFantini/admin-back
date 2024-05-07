@@ -28,12 +28,13 @@ export const deleteUserController = async (
 ) => {
   try {
     const idUser = req.params.id;
+    console.log(idUser);
     const isDeleted = await UserService.delUser(idUser);
 
     if (!isDeleted) {
       return responseError(res, "error to deleted user", 500);
     }
-    return responseNormal(res, {}, "user deleted", 200);
+    return responseNormal(res, isDeleted, "user deleted", 200);
   } catch (error) {
     return responseError(res, "error to deleted user", 500);
   }

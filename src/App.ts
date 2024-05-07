@@ -3,8 +3,11 @@ import express from "express";
 import { connectDb } from "./DB/connection";
 import cors from "cors";
 import { routerApi } from "./routes/routerApi";
+import { defaultValues } from "./utils/defaultValues";
 
-connectDb();
+connectDb().then(() => {
+  defaultValues();
+});
 
 config();
 

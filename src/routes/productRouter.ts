@@ -7,14 +7,19 @@ import {
   GetProductController,
   UpdateProductController,
 } from "../controllers/products";
+import { autNormalJwt } from "../middleware/autJwt";
 
 const routerProduct = Router();
 
-routerProduct.post("/create", CreateProductController);
-routerProduct.get("/one/:id", GetProductController);
-routerProduct.get("/like/:name", GetProductByNameController);
-routerProduct.get("/page/:page/offset/:offset", GetPageProductController);
-routerProduct.delete("/delete/:id", DelProductController);
-routerProduct.patch("/one/:id", UpdateProductController);
+routerProduct.post("/create", autNormalJwt, CreateProductController);
+routerProduct.get("/one/:id", autNormalJwt, GetProductController);
+routerProduct.get("/like/:name", autNormalJwt, GetProductByNameController);
+routerProduct.get(
+  "/page/:page/offset/:offset",
+  autNormalJwt,
+  GetPageProductController
+);
+routerProduct.delete("/delete/:id", autNormalJwt, DelProductController);
+routerProduct.patch("/one/:id", autNormalJwt, UpdateProductController);
 
 export { routerProduct };

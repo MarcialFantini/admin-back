@@ -7,7 +7,7 @@ export interface UserInterface {
   name: string;
   email: string;
   password: string;
-  role_id: string;
+  role_id?: string;
 }
 
 export const Users = sequelize.define<Model<UserInterface>>("Users", {
@@ -18,9 +18,9 @@ export const Users = sequelize.define<Model<UserInterface>>("Users", {
     allowNull: false,
   },
   name: { type: DataTypes.STRING, allowNull: false },
-  email: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false, unique: true },
   password: { type: DataTypes.STRING, allowNull: false },
-  role_id: { type: DataTypes.UUID, allowNull: false },
+  role_id: { type: DataTypes.UUID, allowNull: true },
 });
 
 Roles.hasMany(Users, { foreignKey: "role_id" });

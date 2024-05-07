@@ -10,6 +10,7 @@ import { routerOrderRouter } from "./orderRouter";
 import { roleSection } from "./roleSectionRouter";
 import { operationRouter } from "./operationRouter";
 import { movementsRouter } from "./movementsRouter";
+import { loginRouter } from "./loginRouter";
 
 export const routerApi = async (app: Express) => {
   //rout main all
@@ -31,4 +32,5 @@ export const routerApi = async (app: Express) => {
   routerV1.use("/orders", routerOrderRouter);
   routerV1.use("/operations", operationRouter);
   routerV1.use("/movements", movementsRouter);
+  routerV1.use("/login", loginRouter);
 };
