@@ -17,5 +17,6 @@ export const responseError = (
   error?: unknown,
   data?: unknown
 ) => {
+  // console.log(res, message, code, error, data);
   return res.status(code).json({ error, code, data, message });
 };

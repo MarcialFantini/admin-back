@@ -5,6 +5,7 @@ export enum Sections {
   place = "place",
   products = "products",
   users = "users",
+  operation = "operation",
 }
 
 export const SectionsArray = [
@@ -14,4 +15,5 @@ export const SectionsArray = [
   "orders",
   "place",
   "products",
+  "operation",
 ];

@@ -5,7 +5,7 @@ import { sequelize } from "../connection";
 export interface rolesSectionsInterface {
   id?: string;
   role_id: string;
-  section: Sections;
+  section: Sections | string;
 }
 
 export const rolesSections = sequelize.define<Model<rolesSectionsInterface>>(

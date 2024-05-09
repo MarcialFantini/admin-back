@@ -1,5 +1,7 @@
 import { Roles } from "../DB/models/Roles";
 import { UserInterface, Users } from "../DB/models/Users";
+import { Sections, SectionsArray } from "../sections/roles";
+import { rolesSectionsService } from "../services/rolesSections";
 
 const firstUser: UserInterface = {
   name: "Stefan",
@@ -18,6 +20,13 @@ export const defaultValues = async () => {
   }
 
   const newRole = await Roles.create(role);
+
+  const arrSectionsAdd = SectionsArray.forEach(async (section) => {
+    await rolesSectionsService.createRoleSection({
+      role_id: newRole.dataValues.id || "",
+      section: section,
+    });
+  });
 
   const isUser = await Users.findOne({ where: { email: firstUser.email } });
   if (isUser) {
