@@ -148,3 +148,17 @@ export const orderDeleteById = async (
     return responseError(res, "error to deleted order", 500);
   }
 };
+
+export const getLastOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const orders = await OrdersService.getOrderLastAndStatus();
+
+    return responseNormal(res, orders, "orders found", 200);
+  } catch (error) {
+    return responseError(res, "error to found orders", 500, error);
+  }
+};

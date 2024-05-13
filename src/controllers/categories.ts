@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CategoriesService } from "../services/Categories";
 import { CategoriesInterface } from "../DB/models/Categories";
-import { responseNormal } from "../utils/responseNormal";
+import { responseError, responseNormal } from "../utils/responseNormal";
 
 export const categoriesCreateController = async (
   req: Request,
@@ -80,5 +80,24 @@ export const categoriesOneController = async (
     return res.status(200).json({ message: "products found", code: 200 });
   } catch (error) {
     return res.status(500).json({ message: "error", code: 500, error });
+  }
+};
+
+export const getCategoriesProductsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const categoriesProducts = await CategoriesService.findCategoriesCount();
+
+    return responseNormal(
+      res,
+      categoriesProducts,
+      "categories with products found",
+      200
+    );
+  } catch (error) {
+    return responseError(res, "error", 500, error);
   }
 };

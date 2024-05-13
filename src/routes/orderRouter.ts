@@ -3,6 +3,7 @@ import {
   changeOrderOperationController,
   changeOrderPlaceController,
   createOrderController,
+  getLastOrders,
   getOrderController,
   getOrdersOneWithDetailsController,
   orderDeleteById,
@@ -43,5 +44,13 @@ routerOrderRouter.patch(
   roleMiddleware(Sections.orders),
   changeOrderOperationController
 );
+
+routerOrderRouter.get(
+  "/row/last",
+  autNormalJwt,
+  roleMiddleware(Sections.orders),
+  getLastOrders
+);
+
 routerOrderRouter.delete("/delete/:id", autNormalJwt, orderDeleteById);
 export { routerOrderRouter };

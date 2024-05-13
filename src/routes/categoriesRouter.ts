@@ -4,6 +4,7 @@ import {
   categoriesDelController,
   categoriesOneController,
   categoriesRowController,
+  getCategoriesProductsController,
 } from "../controllers/categories";
 import { autNormalJwt } from "../middleware/autJwt";
 import { Sections } from "../sections/roles";
@@ -36,4 +37,10 @@ categoriesRouter.delete(
   categoriesDelController
 );
 
+categoriesRouter.get(
+  "/count/products",
+  // autNormalJwt,
+  // roleMiddleware(Sections.categories),
+  getCategoriesProductsController
+);
 export { categoriesRouter };

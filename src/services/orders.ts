@@ -121,4 +121,18 @@ WHERE
     );
     return newOrder;
   }
+
+  static async getOrderLastAndStatus() {
+    const lastOrders = await sequelize.query(
+      `SELECT O.id, U.name as name_user, P.name as name_place
+FROM
+    "Orders" as O
+    INNER JOIN "Places" as P ON P.id = O.place_id
+    INNER JOIN "Users" as U ON U.id = O.client_id
+ORDER BY O."createdAt" DESC
+LIMIT 10;`
+    );
+
+    return lastOrders[0];
+  }
 }
